@@ -82,8 +82,8 @@ import {
 import "./App.css";
 
 // API Base URLs
-const BACKEND_URL = "http://localhost:8080";
-const AI_URL = "http://localhost:8000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+const AI_URL = import.meta.env.VITE_AI_URL || "http://localhost:8000";
 
 // Helper to retrieve saved JWT token
 const getAuthToken = () => {

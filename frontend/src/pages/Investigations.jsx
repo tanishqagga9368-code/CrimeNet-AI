@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const API_BASE = "http://localhost:8080"
+const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"
 
 function Investigations() {
   const [showForm, setShowForm] = useState(false)
