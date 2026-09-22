@@ -1,0 +1,63 @@
+{
+  "case_id": "CR-2026-041",
+  "operation_code": "TRIDENT_FIN_FLOW",
+  "currency": "INR",
+  "total_volume": 13000000,
+  "transactions": [
+    {
+      "tx_id": "TX-9901",
+      "date": "2026-03-04T10:15:00Z",
+      "source_account": "ACC-987654321",
+      "source_holder": "Trident Holdings Ltd",
+      "destination_account": "ACC-554433221",
+      "destination_holder": "Amit Mehra",
+      "amount": 950000,
+      "channel": "IMPS_SPLIT",
+      "flag": "STRUCTURING_ANOMALY"
+    },
+    {
+      "tx_id": "TX-9902",
+      "date": "2026-03-04T10:22:00Z",
+      "source_account": "ACC-987654321",
+      "source_holder": "Trident Holdings Ltd",
+      "destination_account": "ACC-554433222",
+      "destination_holder": "Silverline Traders",
+      "amount": 950000,
+      "channel": "IMPS_SPLIT",
+      "flag": "STRUCTURING_ANOMALY"
+    },
+    {
+      "tx_id": "TX-9903",
+      "date": "2026-03-04T10:35:00Z",
+      "source_account": "ACC-987654321",
+      "source_holder": "Trident Holdings Ltd",
+      "destination_account": "ACC-554433223",
+      "destination_holder": "Oceanic Freight Pvt Ltd",
+      "amount": 950000,
+      "channel": "IMPS_SPLIT",
+      "flag": "STRUCTURING_ANOMALY"
+    },
+    {
+      "tx_id": "TX-9904",
+      "date": "2026-03-04T16:50:00Z",
+      "source_account": "ACC-554433221",
+      "source_holder": "Amit Mehra",
+      "destination_account": "ACC-DXB-778899",
+      "destination_holder": "Golden Horizon LLC (Dubai)",
+      "amount": 4500000,
+      "channel": "HAWALA_BOOK_TRANSFER",
+      "flag": "CROSS_BORDER_LAYERED"
+    },
+    {
+      "tx_id": "TX-9905",
+      "date": "2026-03-05T11:00:00Z",
+      "source_account": "ACC-554433223",
+      "source_holder": "Oceanic Freight Pvt Ltd",
+      "destination_account": "ACC-112233445",
+      "destination_holder": "Rajesh Patel",
+      "amount": 600000,
+      "channel": "RTGS",
+      "flag": "CONDUIT_FEE"
+    }
+  ]
+}

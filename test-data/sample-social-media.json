@@ -1,0 +1,24 @@
+{
+  "dataSource": "Social Media & OSINT Monitor",
+  "caseId": "CR-2026-041",
+  "targetHandle": "@vikram_m_trade",
+  "platform": "Telegram / Signal Public Channels",
+  "intercepts": [
+    {
+      "timestamp": "2026-03-04T11:20:00Z",
+      "sender": "@vikram_m_trade",
+      "channel": "Global Traders Hub",
+      "message": "Container logistics cleared for Nhava Sheva Dock 4. Consignment on vehicle MH-01-AB-1234.",
+      "flagged": true,
+      "riskScore": 0.92
+    },
+    {
+      "timestamp": "2026-03-04T12:05:00Z",
+      "sender": "@vikram_m_trade",
+      "recipient": "@amit_freight",
+      "message": "Wire 45L to ACC-554433221. Dubai shipment confirms clearance with Robert Chen.",
+      "flagged": true,
+      "riskScore": 0.96
+    }
+  ]
+}

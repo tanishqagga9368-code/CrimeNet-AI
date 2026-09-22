@@ -1,0 +1,30 @@
+FIRST INFORMATION REPORT (Under Section 154 Cr.P.C.)
+CRIME INVESTIGATION BRANCH - SPECIAL CYBER & ECONOMIC OFFENCES CELL
+FIR No: 412/2026
+Case Reference: CR-2026-041 (Operation Trident)
+Date of Occurrence: 2026-03-01 to 2026-03-10
+Date of Reporting: 2026-03-11 09:30 IST
+
+COMPLAINANT / INFORMANT:
+Inspector R. Sharma, Special Intelligence Cell, Head Office
+
+DETAILS OF ACCUSED / SUSPECTS IDENTIFIED:
+1. Vikram Malhotra (Primary Coordinator & Syndicate Kingpin), frequent traveler between Mumbai and Dubai.
+2. Rajesh Patel (Logistics Handler & Conduit), operating out of Warehouse 14, Sector 22, Nhava Sheva.
+3. Amit Mehra (Financial Structurer & Hawala Operator), controlling nominee accounts.
+4. Sunita Rao (Shell Company Nominee Director), authorized signatory for Trident Holdings Ltd.
+5. Kabir Khan (Transport & Fleet Contractor), operating intercepted heavy vehicle MH-01-AB-1234.
+
+FACTS OF THE CASE & INVESTIGATIVE SUMMARY:
+Confidential field intelligence gathered by the Financial Intelligence Unit and border checkpoint intercept logs indicate that Vikram Malhotra established a multi-layered shell network under the front of Trident Holdings Ltd and Oceanic Freight Pvt Ltd.
+
+On 2026-03-04, a suspicious international wire remittance of INR 45,00,000 was credited to Bank Account ACC-987654321 registered at Mumbai South Commercial Branch. Within 48 minutes, the capital was systematically fragmented into tranches of INR 9,50,000 and transferred to intermediary account ACC-554433221 operated by Amit Mehra.
+
+Parallel surveillance and telecom intercept reports revealed 48 encrypted calls from burner phone +91-98201-11223 (utilized by Vikram Malhotra) to logistics phone +91-98201-22334 (assigned to Rajesh Patel) while traversing the Nhava Sheva corridor. Intercept vehicle MH-01-AB-1234 was identified transporting untagged consignment containers to Dock 4, Port of Mumbai.
+
+Subsequent banking trace confirmed further outbound remittances totaling INR 85,00,000 sent to offshore entity Golden Horizon LLC based in Dubai.
+
+SEIZED EVIDENCE & ATTACHMENTS:
+- Tamper-proof digital copy of intercepted banking ledgers (SHA-256 verified)
+- CDR extracts for mobile numbers +91-98201-11223, +91-98201-22334, +91-98201-33445
+- CCTV toll booth logs for vehicle MH-01-AB-1234
