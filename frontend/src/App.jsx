@@ -82,8 +82,11 @@ import {
 import "./App.css";
 
 // API Base URLs
-const BACKEND_URL = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || "http://localhost:8080";
-const AI_URL = (typeof window !== "undefined" && window.__CRIMENET_AI_URL__) || import.meta.env.VITE_AI_URL || (typeof window !== "undefined" && localStorage.getItem("netra_ai_url")) || "http://localhost:8000";
+const rawBackendUrl = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || "http://localhost:8080";
+const BACKEND_URL = String(rawBackendUrl).trim().replace(/\/+$/, "");
+
+const rawAiUrl = (typeof window !== "undefined" && window.__CRIMENET_AI_URL__) || import.meta.env.VITE_AI_URL || (typeof window !== "undefined" && localStorage.getItem("netra_ai_url")) || "http://localhost:8000";
+const AI_URL = String(rawAiUrl).trim().replace(/\/+$/, "");
 
 // Helper to retrieve saved JWT token
 const getAuthToken = () => {
