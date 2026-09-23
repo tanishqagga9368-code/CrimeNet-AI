@@ -1,0 +1,57 @@
+services:
+  # Spring Boot Backend API
+  - type: web
+    name: crimenet-backend
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: crimenet-postgres
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: crimenet-postgres
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: crimenet-postgres
+          property: password
+      - key: NEO4J_URI
+        sync: false
+      - key: NEO4J_USERNAME
+        sync: false
+      - key: NEO4J_PASSWORD
+        sync: false
+      - key: AI_SERVICE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:5173,https://crime-net-ai-1dsp.vercel.app
+
+  # Python FastAPI AI Service
+  - type: web
+    name: crimenet-ai-service
+    runtime: docker
+    dockerContext: ./ai-service
+    dockerfilePath: ./ai-service/Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:5173,https://crime-net-ai-1dsp.vercel.app
+
+databases:
+  - name: crimenet-postgres
+    plan: free
+    region: oregon
+    databaseName: criminal_network_intelligence
+    user: postgres

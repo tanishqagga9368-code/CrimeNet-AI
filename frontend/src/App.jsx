@@ -82,8 +82,8 @@ import {
 import "./App.css";
 
 // API Base URLs
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
-const AI_URL = import.meta.env.VITE_AI_URL || "http://localhost:8000";
+const BACKEND_URL = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || "http://localhost:8080";
+const AI_URL = (typeof window !== "undefined" && window.__CRIMENET_AI_URL__) || import.meta.env.VITE_AI_URL || (typeof window !== "undefined" && localStorage.getItem("netra_ai_url")) || "http://localhost:8000";
 
 // Helper to retrieve saved JWT token
 const getAuthToken = () => {
@@ -2035,7 +2035,11 @@ function App() {
       }
     } catch (err) {
       console.error("Backend auth communication error:", err);
-      setLoginError("Unable to establish secure connection with Spring Boot authentication server. Please ensure backend is online.");
+      const isHttpsLocalhostMismatch = typeof window !== "undefined" && window.location.protocol === "https:" && BACKEND_URL.includes("localhost");
+      const msg = isHttpsLocalhostMismatch
+        ? `Unable to establish secure connection with Spring Boot authentication server. The production frontend is attempting to connect to "${BACKEND_URL}", which is blocked on HTTPS. Please configure VITE_BACKEND_URL in Vercel to your deployed Spring Boot HTTPS backend.`
+        : "Unable to establish secure connection with Spring Boot authentication server. Please ensure backend is online.";
+      setLoginError(msg);
       setShowLoginModal(true);
     } finally {
       setIsLoggingIn(false);
