@@ -2031,10 +2031,12 @@ function App() {
       } else {
         const err = await res.json().catch(() => ({}));
         setLoginError(err.message || "Invalid credentials. Please verify username and password.");
+        setShowLoginModal(true);
       }
     } catch (err) {
       console.error("Backend auth communication error:", err);
       setLoginError("Unable to establish secure connection with Spring Boot authentication server. Please ensure backend is online.");
+      setShowLoginModal(true);
     } finally {
       setIsLoggingIn(false);
     }

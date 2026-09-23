@@ -21,18 +21,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
+import java.util.Arrays;
+
 @Configuration
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AppUserService appUserService;
+    private final String allowedOriginsStr;
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            AppUserService appUserService
+            AppUserService appUserService,
+            @Value("${cors.allowed-origins:http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000,https://crime-net-ai-1dsp.vercel.app}") String allowedOriginsStr
     ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.appUserService = appUserService;
+        this.allowedOriginsStr = allowedOriginsStr;
     }
 
     @Bean
@@ -174,17 +180,15 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
+        List<String> origins = Arrays.stream(allowedOriginsStr.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedOriginPatterns(
                 List.of(
-                        "*"
-                )
-        );
-        configuration.setAllowedOrigins(
-                List.of(
-                        "http://localhost:5173",
-                        "http://127.0.0.1:5173",
-                        "http://localhost:3000",
-                        "http://127.0.0.1:3000"
+                        "https://*.vercel.app"
                 )
         );
 
@@ -201,6 +205,10 @@ public class SecurityConfig {
 
         configuration.setAllowedHeaders(
                 List.of("*")
+        );
+
+        configuration.setExposedHeaders(
+                List.of("Authorization", "Content-Disposition")
         );
 
         configuration.setAllowCredentials(true);

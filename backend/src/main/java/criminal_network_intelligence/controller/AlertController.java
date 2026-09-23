@@ -18,7 +18,7 @@ import criminal_network_intelligence.service.AlertService;
 
 @RestController
 @RequestMapping("/api/alerts")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "https://crime-net-ai-1dsp.vercel.app"}, originPatterns = {"https://*.vercel.app"})
 public class AlertController {
 
     private final AlertService alertService;

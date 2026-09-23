@@ -1,3 +1,4 @@
+import os
 from typing import Any, Dict, List, Optional
 import hashlib
 import re
@@ -12,9 +13,23 @@ app = FastAPI(
 )
 
 # Enable CORS for frontend and backend integration
+cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://crime-net-ai-1dsp.vercel.app",
+]
+if cors_origins_env:
+    for o in cors_origins_env.split(","):
+        if o.strip() and o.strip() not in allowed_origins:
+            allowed_origins.append(o.strip())
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"^https://.*\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -995,3 +1010,10 @@ def analyze_text_endpoint(request: TextAnalysisRequest):
 @app.post("/api/ai/investigation")
 def investigation(request: InvestigationRequest):
     return generate_copilot_answer(request.question, request.context)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+

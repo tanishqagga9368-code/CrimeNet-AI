@@ -15,7 +15,7 @@ import criminal_network_intelligence.service.LocationClusterService;
 
 @RestController
 @RequestMapping("/api/location/clusters")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "https://crime-net-ai-1dsp.vercel.app"}, originPatterns = {"https://*.vercel.app"})
 public class LocationClusterController {
 
     private final LocationClusterService locationClusterService;
