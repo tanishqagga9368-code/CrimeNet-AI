@@ -48,11 +48,12 @@ public class AuthController {
     ) {
 
         try {
+            String username = request.getUsername() != null ? request.getUsername().trim() : "";
 
             Authentication authentication =
                     authenticationManager.authenticate(
                             new UsernamePasswordAuthenticationToken(
-                                    request.getUsername(),
+                                    username,
                                     request.getPassword()
                             )
                     );
@@ -63,7 +64,7 @@ public class AuthController {
 
             AppUser user =
                     appUserService.getUser(
-                            request.getUsername()
+                            username
                     );
 
             String token =

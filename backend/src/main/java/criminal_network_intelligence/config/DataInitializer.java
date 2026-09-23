@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -19,6 +20,7 @@ import criminal_network_intelligence.repository.EvidenceRepository;
 import criminal_network_intelligence.repository.IntelligenceRecordRepository;
 
 @Component
+@Order(2)
 public class DataInitializer implements CommandLineRunner {
 
     private final EvidenceRepository evidenceRepository;

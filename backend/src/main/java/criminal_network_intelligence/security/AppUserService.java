@@ -33,7 +33,8 @@ public class AppUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-        AppUser user = userRepository.findByUsername(username)
+        String clean = (username != null) ? username.trim() : "";
+        AppUser user = userRepository.findByUsernameIgnoreCase(clean)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 "User not found: " + username
@@ -55,7 +56,8 @@ public class AppUserService implements UserDetailsService {
 
     public AppUser getUser(String username) {
 
-        return userRepository.findByUsername(username)
+        String clean = (username != null) ? username.trim() : "";
+        return userRepository.findByUsernameIgnoreCase(clean)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 "User not found: " + username
