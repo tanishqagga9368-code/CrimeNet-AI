@@ -2,12 +2,15 @@ package criminal_network_intelligence.controller;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,8 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "https://crime-net-ai-1dsp.vercel.app"}, originPatterns = {"https://*.vercel.app"})
 public class AuthController {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     private final AuthenticationManager authenticationManager;
     private final AppUserService appUserService;
     private final JwtService jwtService;
@@ -47,9 +52,9 @@ public class AuthController {
             @Valid @RequestBody LoginRequest request
     ) {
 
-        try {
-            String username = request.getUsername() != null ? request.getUsername().trim() : "";
+        String username = request.getUsername() != null ? request.getUsername().trim() : "";
 
+        try {
             Authentication authentication =
                     authenticationManager.authenticate(
                             new UsernamePasswordAuthenticationToken(
@@ -81,8 +86,8 @@ public class AuthController {
 
             return ResponseEntity.ok(response);
 
-        } catch (BadCredentialsException exception) {
-
+        } catch (AuthenticationException exception) {
+            log.warn("Authentication failed for user '{}': {}", username, exception.getMessage());
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of(

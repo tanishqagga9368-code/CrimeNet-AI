@@ -34,17 +34,18 @@ public class AppUserService implements UserDetailsService {
             throws UsernameNotFoundException {
 
         String clean = (username != null) ? username.trim() : "";
-        AppUser user = userRepository.findByUsernameIgnoreCase(clean)
+        AppUser user = userRepository.findFirstByUsernameIgnoreCase(clean)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 "User not found: " + username
                         )
                 );
 
-        GrantedAuthority authority =
-                new SimpleGrantedAuthority(
-                        "ROLE_" + user.getRole().toUpperCase()
-                );
+        String rawRole = (user.getRole() != null && !user.getRole().isBlank()) 
+                ? user.getRole().trim().toUpperCase() 
+                : "OFFICER";
+        String roleName = rawRole.startsWith("ROLE_") ? rawRole : "ROLE_" + rawRole;
+        GrantedAuthority authority = new SimpleGrantedAuthority(roleName);
 
         return User.builder()
                 .username(user.getUsername())
@@ -57,7 +58,7 @@ public class AppUserService implements UserDetailsService {
     public AppUser getUser(String username) {
 
         String clean = (username != null) ? username.trim() : "";
-        return userRepository.findByUsernameIgnoreCase(clean)
+        return userRepository.findFirstByUsernameIgnoreCase(clean)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 "User not found: " + username
