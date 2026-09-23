@@ -2037,8 +2037,29 @@ function App() {
         setShowLoginModal(false);
         setActivePage("dashboard");
       } else {
-        const err = await res.json().catch(() => ({}));
-        setLoginError(err.message || "Invalid credentials. Please verify username and password.");
+        let err = {};
+        try {
+          err = await res.json();
+        } catch (_) {
+          // Response body was not JSON (e.g. plain text or gateway HTML)
+        }
+
+        if (res.status === 401) {
+          setLoginError(err.message || "Invalid credentials. Please verify username and password.");
+        } else if (res.status === 504 || res.status === 502) {
+          setLoginError(`Backend server gateway timeout (${res.status}). The Spring Boot service or database took too long to respond.`);
+        } else if (res.status === 500) {
+          const vError = res.headers ? res.headers.get("x-vercel-error") : null;
+          if (vError === "FUNCTION_INVOCATION_FAILED") {
+            setLoginError("Spring Boot backend execution failed (Vercel FUNCTION_INVOCATION_FAILED). Ensure backend container environment variables (SPRING_DATASOURCE_URL) are configured in Vercel.");
+          } else {
+            setLoginError(err.message || `Spring Boot internal server error (${res.status}). Check backend logs and database connectivity.`);
+          }
+        } else if (res.status === 503) {
+          setLoginError(err.message || "Spring Boot service or database temporarily unavailable (503).");
+        } else {
+          setLoginError(err.message || `Authentication service returned HTTP ${res.status}.`);
+        }
         setShowLoginModal(true);
       }
     } catch (err) {
