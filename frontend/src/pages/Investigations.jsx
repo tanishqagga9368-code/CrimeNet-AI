@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const rawApiBase = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || "http://localhost:8080";
+const rawApiBase = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || (import.meta.env.DEV ? "http://localhost:8080" : "");
 const API_BASE = String(rawApiBase).trim().replace(/\/+$/, "");
 
 function Investigations() {

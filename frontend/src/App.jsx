@@ -82,10 +82,15 @@ import {
 import "./App.css";
 
 // API Base URLs
-const rawBackendUrl = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || "http://localhost:8080";
+// Priority:
+// 1. Runtime window override (window.__CRIMENET_BACKEND_URL__)
+// 2. Build-time environment variable (import.meta.env.VITE_BACKEND_URL)
+// 3. Browser localStorage override (localStorage.getItem("netra_backend_url"))
+// 4. Fallback: "http://localhost:8080" in local development mode, "" (same-origin relative) in production
+const rawBackendUrl = (typeof window !== "undefined" && window.__CRIMENET_BACKEND_URL__) || import.meta.env.VITE_BACKEND_URL || (typeof window !== "undefined" && localStorage.getItem("netra_backend_url")) || (import.meta.env.DEV ? "http://localhost:8080" : "");
 const BACKEND_URL = String(rawBackendUrl).trim().replace(/\/+$/, "");
 
-const rawAiUrl = (typeof window !== "undefined" && window.__CRIMENET_AI_URL__) || import.meta.env.VITE_AI_URL || (typeof window !== "undefined" && localStorage.getItem("netra_ai_url")) || "http://localhost:8000";
+const rawAiUrl = (typeof window !== "undefined" && window.__CRIMENET_AI_URL__) || import.meta.env.VITE_AI_URL || (typeof window !== "undefined" && localStorage.getItem("netra_ai_url")) || (import.meta.env.DEV ? "http://localhost:8000" : "");
 const AI_URL = String(rawAiUrl).trim().replace(/\/+$/, "");
 
 // Helper to retrieve saved JWT token
@@ -106,7 +111,7 @@ if (typeof window !== "undefined" && !window.__netra_fetch_interceptor_set) {
   const originalFetch = window.fetch;
   window.fetch = async function(input, init = {}) {
     let url = typeof input === "string" ? input : (input && input.url ? input.url : "");
-    if (url && (url.startsWith(BACKEND_URL) || url.startsWith("/api/")) && !url.includes("/api/auth/login")) {
+    if (url && ((BACKEND_URL && url.startsWith(BACKEND_URL)) || url.startsWith("/api/")) && !url.includes("/api/auth/login")) {
       const token = getAuthToken();
       if (token) {
         const headers = new Headers(init.headers || (input instanceof Request ? input.headers : {}));
@@ -117,7 +122,7 @@ if (typeof window !== "undefined" && !window.__netra_fetch_interceptor_set) {
       }
     }
     const response = await originalFetch(input, init);
-    if (response.status === 401 && url && (url.startsWith(BACKEND_URL) || url.startsWith("/api/")) && !url.includes("/api/auth/login")) {
+    if (response.status === 401 && url && ((BACKEND_URL && url.startsWith(BACKEND_URL)) || url.startsWith("/api/")) && !url.includes("/api/auth/login")) {
       const activeToken = getAuthToken();
       if (activeToken) {
         try {
