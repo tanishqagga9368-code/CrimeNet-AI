@@ -2037,28 +2037,19 @@ function App() {
         setShowLoginModal(false);
         setActivePage("dashboard");
       } else {
-        let err = {};
+        let err = null;
         try {
           err = await res.json();
         } catch (_) {
-          // Response body was not JSON (e.g. plain text or gateway HTML)
+          err = null;
         }
 
-        if (res.status === 401) {
+        if (!err || [500, 502, 503, 504].includes(res.status)) {
+          setLoginError("Server error. Please try again in a moment.");
+        } else if (res.status === 401 || (res.status === 400 && (err.message || "").toLowerCase().includes("credential"))) {
           setLoginError(err.message || "Invalid credentials. Please verify username and password.");
-        } else if (res.status === 504 || res.status === 502) {
-          setLoginError(`Backend server gateway timeout (${res.status}). The Spring Boot service or database took too long to respond.`);
-        } else if (res.status === 500) {
-          const vError = res.headers ? res.headers.get("x-vercel-error") : null;
-          if (vError === "FUNCTION_INVOCATION_FAILED") {
-            setLoginError("Spring Boot backend execution failed (Vercel FUNCTION_INVOCATION_FAILED). Ensure backend container environment variables (SPRING_DATASOURCE_URL) are configured in Vercel.");
-          } else {
-            setLoginError(err.message || `Spring Boot internal server error (${res.status}). Check backend logs and database connectivity.`);
-          }
-        } else if (res.status === 503) {
-          setLoginError(err.message || "Spring Boot service or database temporarily unavailable (503).");
         } else {
-          setLoginError(err.message || `Authentication service returned HTTP ${res.status}.`);
+          setLoginError(err.message || "Server error. Please try again in a moment.");
         }
         setShowLoginModal(true);
       }
@@ -2077,7 +2068,13 @@ function App() {
 
   const handleLoginSubmit = async (e) => {
     if (e) e.preventDefault();
-    await handleDirectLogin(loginForm.username, loginForm.password);
+    const username = (e?.currentTarget?.elements?.username?.value != null && e.currentTarget.elements.username.value !== "")
+      ? e.currentTarget.elements.username.value
+      : loginForm.username;
+    const password = (e?.currentTarget?.elements?.password?.value != null && e.currentTarget.elements.password.value !== "")
+      ? e.currentTarget.elements.password.value
+      : loginForm.password;
+    await handleDirectLogin(username, password);
   };
 
   const handleLogout = async () => {
@@ -7115,6 +7112,8 @@ function App() {
                 <div className="relative flex items-center">
                   <input
                     type="text"
+                    name="username"
+                    autoComplete="username"
                     className="search-input w-full"
                     placeholder="officer / senior_officer / admin"
                     value={loginForm.username}
@@ -7129,6 +7128,8 @@ function App() {
                 <div className="password-input-wrap">
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
+                    autoComplete="current-password"
                     className="search-input w-full"
                     placeholder="Enter password..."
                     value={loginForm.password}
